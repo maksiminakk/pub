@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'NunitoSans';
+    src: url('../fonts/NunitoSans10pt-Regular.woff2') format('woff2'),
+        url('../fonts/NunitoSans10pt-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NunitoSans';
+    src: url('../fonts/NunitoSans10pt-Bold.woff2') format('woff2'),
+        url('../fonts/NunitoSans10pt-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'InterTight';
+    src: url('../fonts/InterTight-Bold.woff2') format('woff2'),
+        url('../fonts/InterTight-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+
+
+$primary: #F5F2EF;
+$secondary: #141414;
+$accent: #B48D65;
+
+:global(body) {
+    background-color: $primary;
+    font-family: 'NunitoSans';
+    font-size: 16px;
+    color: $secondary;
+
+    a {
+        color: $secondary;
+    }
+}
+
+.wrapper {
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1230px;
+    padding: 0px 30px;
+    margin: 0 auto;
+
+    @media(max-width:492px) {
+        padding: 0px 16px;
+    }
+}
