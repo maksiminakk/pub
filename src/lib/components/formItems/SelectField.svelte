@@ -115,7 +115,7 @@
       top: 100%;
       left: 0;
       width: 100%;
-      z-index: 1;
+      z-index: 3;
       background-color: $primary;
       padding: 16px 20px;
       border: 1px solid $secondary;

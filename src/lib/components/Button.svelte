@@ -4,7 +4,7 @@
   export let variant = "default";
   export let size = "medium";
   export let href = null;
-  export let onClick;
+  export let onClick = () => {};
 
   const classes = `button ${className} button__${variant} button__${size}`;
 </script>

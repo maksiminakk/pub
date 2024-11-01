@@ -5,7 +5,7 @@
   import Form from "../Form.svelte";
 </script>
 
-<section class="reservation section">
+<section id="reservation" class="reservation section">
   <div class="reservation__container container">
     <div class="reservation__body">
       <div class="reservation__top">
@@ -42,6 +42,7 @@
 
     &__top {
         margin-bottom: 52px;
+        text-align: center;
         @media(max-width:768px) {
           margin-bottom: 32px;
           text-align: center;

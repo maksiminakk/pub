@@ -2,46 +2,41 @@
   import { onMount } from "svelte";
   import InputField from "./formItems/InputField.svelte";
   import SelectField from "./formItems/SelectField.svelte";
-  import MaskInput from "svelte-input-mask";
   import { writable } from "svelte/store";
   import Button from "./Button.svelte";
-  import { Datepicker } from 'svelte-calendar';
-  
+  import Datepicker from "./formItems/Datepicker.svelte";
+
   let timeOptions = [];
   let selectedTime = "";
   let name = "";
   let phone = "";
   let phoneError = "";
-  let selectedOption = "";
   let errors = writable({});
-  
-  const theme = {
-    calendar: {
-      width: '400px',
-      shadow: '0px 0px 5px rgba(0, 0, 0, 0.25)'
-    }
-  };
-
   let selectedDate = null;
-  let guestCount = ""; // количество гостей
+
+  let guestCount = "";
 
   // Опции для количества гостей от 1 до 10
   const guestOptions = Array.from({ length: 10 }, (_, i) => ({
     value: `${i + 1}`,
-    label: `${i + 1} ${i + 1 === 1 ? 'guest' : 'guests'}`,
+    label: `${i + 1} ${i + 1 === 1 ? "guest" : "guests"}`,
   }));
 
-  // Генерация времени
+  // Параметры для генерации временных опций
+  const step = 30;
+  const endTime = new Date();
+  endTime.setHours(22, 0, 0, 0);
+
+  // Генерация временных опций
   function generateTimeOptions() {
     const options = [];
     const now = new Date();
+
     now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
     now.setSeconds(0);
     now.setMilliseconds(0);
 
-    const endTime = new Date(now.getTime() + 12 * 60 * 60 * 1000);
     let currentTime = new Date(now);
-
     while (currentTime <= endTime) {
       const hours = String(currentTime.getHours()).padStart(2, "0");
       const minutes = String(currentTime.getMinutes()).padStart(2, "0");
@@ -49,7 +44,7 @@
         value: `${hours}:${minutes}`,
         label: `${hours}:${minutes}`,
       });
-      currentTime = new Date(currentTime.getTime() + 15 * 60 * 1000);
+      currentTime = new Date(currentTime.getTime() + step * 60 * 1000);
     }
 
     return options;
@@ -62,14 +57,6 @@
     }
   });
 
-  function validatePhone() {
-    if (!/^\+420 \d{3} \d{3} \d{3}$/.test(phone)) {
-      phoneError = "Введите корректный номер телефона";
-    } else {
-      phoneError = "";
-    }
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
     const validationErrors = {};
@@ -77,8 +64,8 @@
     if (!name) validationErrors.name = "Введите имя";
     if (phoneError || !phone)
       validationErrors.phone = "Введите корректный номер телефона";
-    if (!selectedOption) validationErrors.selectedOption = "Выберите опцию";
     if (!guestCount) validationErrors.guestCount = "Укажите количество гостей";
+    if (!selectedDate) validationErrors.selectedDate = "Выберите дату";
 
     if (Object.keys(validationErrors).length > 0) {
       errors.set(validationErrors);
@@ -86,7 +73,34 @@
     }
 
     errors.set({});
-    alert("Форма отправлена");
+
+    const reservationData = {
+      name,
+      phone,
+      selectedTime,
+      selectedDate: selectedDate.toLocaleDateString('ru-RU'),
+      guestCount,
+    };
+
+    console.log(reservationData);
+    
+    // Отправка данных на сервер
+    try {
+      const response = await fetch("/reservation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reservationData),
+      });
+      if (!response.ok) {
+        throw new Error("Ошибка отправки формы. Попробуйте еще раз.");
+      }
+      alert("Бронирование успешно отправлено!");
+    } catch (error) {
+      console.error("Ошибка отправки формы:", error);
+      alert("Ошибка отправки формы.");
+    }
   }
 </script>
 
@@ -96,25 +110,24 @@
       <InputField bind:value={name} placeholder="Name" error={$errors.name} />
     </div>
     <div class="form__item">
-      <MaskInput
-        bind:value={phone}
-        alwaysShowMask
-        mask="+420 (000) 000-000"
-        size={20}
-        class="input"
-        showMask
-        maskChar="_"
-        on:blur={validatePhone}
+      <InputField placeholder="Phone" bind:value={phone} mask="+{420} 000 000 000" />
+    </div>
+    <div class="form__item">
+      <SelectField
+        bind:selected={selectedTime}
+        options={timeOptions}
+        placeholder="Time"
       />
     </div>
     <div class="form__item">
-      <SelectField bind:selected={selectedTime} options={timeOptions} placeholder="Time"/>
+      <Datepicker bind:selectedDate={selectedDate} />
     </div>
     <div class="form__item">
-      <Datepicker {theme}/>
-    </div>
-    <div class="form__item">
-      <SelectField bind:selected={guestCount} options={guestOptions} placeholder="Number of seats"/>
+      <SelectField
+        bind:selected={guestCount}
+        options={guestOptions}
+        placeholder="Number of seats"
+      />
     </div>
     <Button size="large" variant="primary" type="submit">Button</Button>
   </div>
@@ -127,7 +140,7 @@
       flex-direction: column;
       gap: 16px;
       margin-bottom: 28px;
-      @media(max-width:768px) {
+      @media (max-width: 768px) {
         margin: 0;
       }
     }

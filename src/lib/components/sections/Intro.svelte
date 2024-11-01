@@ -3,6 +3,7 @@
   import Button from "../Button.svelte";
   import imageSrc from "../../img/intro.svg";
   import "../../styles/sectionStyles.scss";
+  import { handleAnchorClick } from "../../../helpers/scrollTo"
 </script>
 
 <section class="intro section">
@@ -17,8 +18,8 @@
           mi. Aliquam in hendrerit urna.
         </p>
         <div class="intro__buttons">
-          <Button size="large" variant="primary">Book Table</Button>
-          <Button size="large" variant="secondary">Location</Button>
+          <Button size="large" variant="primary" href="#reservation" onClick={handleAnchorClick}>Book Table</Button>
+          <Button size="large" variant="secondary" href="#location" onClick={handleAnchorClick}>Location</Button>
         </div>
       </div>
       <div class="intro__image">

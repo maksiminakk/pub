@@ -3,11 +3,11 @@
   import Map from "../Map.svelte";
   import "../../styles/sectionStyles.scss";
 
-  const apiKey = "ВАШ_API_КЛЮЧ";
+  const apiKey = "AIzaSyBvL_ax990BMiHgkMR8Yp_qux_pEJqKAV4";
   const center = { lat: 55.7558, lng: 37.6176 };
 </script>
 
-<section class="section location">
+<section class="section location" id="location">
   <div class="location__container container">
     <div class="location__body">
       <div class="location__top">

@@ -7,16 +7,19 @@
     {
       image: image,
       title: "Подзаголовок. Кегль шрифта может быть больше",
+      description: "Описание в 3-5 строчек",
       buttonText: "Button",
     },
     {
       image: image,
       title: "Подзаголовок. Кегль шрифта может быть больше",
+      description: "Описание в 3-5 строчек",
       buttonText: "Button",
     },
     {
       image: image,
       title: "Подзаголовок. Кегль шрифта может быть больше",
+      description: "Описание в 3-5 строчек",
       buttonText: "Button",
     },
   ];
@@ -41,7 +44,7 @@
                 tag="h3"
                 size="small">{item.title}</Heading
               >
-              <p class="text">Описание в 3-5 строчек</p>
+              <p class="text">{item.description}</p>
               <Button size="large" variant="primary">
                 {item.buttonText}
               </Button>
@@ -100,6 +103,7 @@
     @media(max-width:700px) {
         flex-direction: column;
         gap: 32px;
+        align-items: stretch;
     }
 
     &__image {

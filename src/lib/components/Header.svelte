@@ -18,6 +18,10 @@
     isMobileMenuOpen = !isMobileMenuOpen;
   }
 
+  function closeMenu() {
+    isMobileMenuOpen = false;
+  }
+
   onMount(() => {
     const checkMobile = () => {
       isMobile = window.innerWidth < 769;
@@ -35,7 +39,7 @@
         <Logo />
         Logo
       </a>
-      <Menu {links} isMobile={isMobile} isMobileMenuOpen={isMobileMenuOpen} />
+      <Menu {links} isMobile={isMobile} isMobileMenuOpen={isMobileMenuOpen} closeMenu={closeMenu}/>
       {#if isMobile}
         <BurgerButton onClick={toggleMenu} isActive={isMobileMenuOpen}/>
       {/if}

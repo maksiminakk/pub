@@ -1,8 +1,23 @@
 <script>
   import Button from "./Button.svelte";
+  import { goto } from "$app/navigation";
   export let links = [];
   export let isMobile = false;
   export let isMobileMenuOpen = false;
+  export let closeMenu;
+  import { handleAnchorClick } from "../../helpers/scrollTo";
+
+  function handleLinkClick(event, href) {
+    event.preventDefault();
+    closeMenu();
+    goto(href);
+  }
+
+  function handleButtonClick(event) {
+    event.preventDefault();
+    closeMenu();
+    handleAnchorClick(event);
+  }
 </script>
 
 <nav
@@ -10,18 +25,35 @@
   isMobileMenuOpen
     ? 'open'
     : ''}"
+  on:closeMenu={closeMenu}
 >
   <ul class="menu__list">
     {#each links as { href, label }}
       <li>
-        <a {href} class="menu__link">{label}</a>
+        <a
+          {href}
+          on:click={(event) => handleLinkClick(event, href)}
+          class="menu__link">{label}</a
+        >
       </li>
     {/each}
   </ul>
   {#if isMobile}
     <div class="menu__buttons">
-      <Button style="width: 100%" size="large" variant="primary">Book Table</Button>
-      <Button style="width: 100%" size="large" variant="secondary">Location</Button>
+      <Button
+        style="width: 100%"
+        size="large"
+        variant="primary"
+        href="#reservation"
+        onClick={(event) => handleButtonClick(event)}>Book Table</Button
+      >
+      <Button
+        style="width: 100%"
+        size="large"
+        variant="secondary"
+        href="#location"
+        onClick={(event) => handleButtonClick(event)}>Location</Button
+      >
     </div>
   {/if}
 </nav>
@@ -83,7 +115,7 @@
     }
   }
 
-  @media(max-width:492px) {
+  @media (max-width: 492px) {
     .menu {
       padding: 100px 16px 40px 16px;
       &__list {
@@ -95,7 +127,7 @@
       }
 
       &__buttons {
-       flex-direction: column;
+        flex-direction: column;
       }
     }
   }
